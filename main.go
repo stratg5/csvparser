@@ -1,27 +1,34 @@
 package main
 
 import (
-	"empora/addyverification"
+	"empora/addylookup"
 	"empora/entities"
+	"flag"
 
 	"github.com/smartystreets/smartystreets-go-sdk/wireup"
 )
 
 func main() {
+	var csvPath = flag.String("csvPath", "./addresses.csv", "the path to the csv, defaults to ./addresses.csv")
+	var id = flag.String("apiID", "", "the api ID")
+	var token = flag.String("apiToken", "", "the api token")
 
-	// TODO check for the id and token in entities file, if not present then prompt
-	
-	svc := addyverification.NewService(wireup.BuildUSStreetAPIClient(wireup.SecretKeyCredential(entities.ID, entities.Token)))
-
-}
-
-// func main() {
-	// accept the path to the csv as a flag
+	println(*csvPath)
+	println(*id)
+	println(*token)
 	// parse the csv with fields Street, City and Zip Code
 	// account for missing or incorrect fields
 	// gather the 3 fields into an object
 	// Send the fields to the endpoint for verification
 	// Generate the output as a csv or as console output (flag for options)
+
+	// TODO check for the id and token in entities file, if not present then prompt
+	
+	client := addylookup.NewClient(wireup.BuildUSStreetAPIClient(wireup.SecretKeyCredential(entities.ID, entities.Token)))
+
+}
+
+// func main() {
 
 	// 	Create a command-line program that validates a US address against the following API and
 	// outputs either the corrected address or Invalid Address

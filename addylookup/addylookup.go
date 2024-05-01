@@ -1,4 +1,4 @@
-package addyverification
+package addylookup
 
 import (
 	"empora/entities"
@@ -10,17 +10,17 @@ import (
 // TODO rename this?
 // TODO decide if we want to break out the low level stuff to another place/encapsulate it
 
-type Service struct {
+type Client struct {
 	LookupClient LookupSender
 }
 
-func NewService(lookupSender LookupSender) Service {
-	return Service{
+func NewClient(lookupSender LookupSender) Client {
+	return Client{
 		LookupClient: lookupSender,
 	}
 }
 
-func (s Service) BuildLookups(addresses []entities.Address) []*street.Lookup {
+func (c Client) BuildLookups(addresses []entities.Address) []*street.Lookup {
 	lookups := []*street.Lookup{}
 	for _, address := range addresses {
 		lookups = append(lookups, &street.Lookup{
@@ -33,8 +33,8 @@ func (s Service) BuildLookups(addresses []entities.Address) []*street.Lookup {
 	return lookups
 }
 
-func (s Service) SendLookups(lookups ...*street.Lookup) error {
-	err := s.LookupClient.SendLookups(lookups...)
+func (c Client) SendLookups(lookups ...*street.Lookup) error {
+	err := c.LookupClient.SendLookups(lookups...)
 	if err != nil {
 		return fmt.Errorf("error while sending lookups: %w", err)
 	}

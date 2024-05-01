@@ -1,4 +1,4 @@
-package addyverification
+package addylookup
 
 import street "github.com/smartystreets/smartystreets-go-sdk/us-street-api"
 
