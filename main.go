@@ -1,7 +1,7 @@
 package main
 
 import (
-	"empora/addylookup"
+	"empora/address"
 	"empora/entities"
 	"flag"
 
@@ -24,7 +24,7 @@ func main() {
 
 	// TODO check for the id and token in entities file, if not present then prompt
 	
-	client := addylookup.NewClient(wireup.BuildUSStreetAPIClient(wireup.SecretKeyCredential(entities.ID, entities.Token)))
+	client := address.NewClient(wireup.BuildUSStreetAPIClient(wireup.SecretKeyCredential(entities.ID, entities.Token)))
 
 }
 

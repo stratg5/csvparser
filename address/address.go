@@ -1,4 +1,4 @@
-package addylookup
+package address
 
 import (
 	"empora/entities"
@@ -14,6 +14,8 @@ type Client struct {
 	LookupClient LookupSender
 }
 
+// NewClient generates a new address client
+// This client currently only has the ability to perform lookups but could be extended
 func NewClient(lookupSender LookupSender) Client {
 	return Client{
 		LookupClient: lookupSender,
