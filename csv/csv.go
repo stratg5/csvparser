@@ -33,22 +33,21 @@ func (s Service) ReadCSV(path string) ([][]string, error) {
 	return reader.ReadAll()
 }
 
-func (s Service) WriteCSV(path string, records [][]string) error {
+func (s Service) WriteCSV(path string, records []string) error {
 	csvFile, close, err := s.ostool.Create(path)
 	if err != nil {
 		return fmt.Errorf("error creating csv file: %w", err)
 	}
 	defer close()
 
-	csvwriter := csv.NewWriter(csvFile)
 
 	for _, record := range records {
-		writeErr := csvwriter.Write(record)
+		_, writeErr := csvFile.Write([]byte(record + "\n"))
 		if err != nil {
 			err = errors.Join(err, writeErr)
 		}
 	}
-	csvwriter.Flush()
 
 	return err
 }
+
