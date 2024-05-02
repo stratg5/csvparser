@@ -33,7 +33,7 @@ func (s Service) ParseCSVAndGenerateOutput(inputPath, outputPath string) error {
 		return fmt.Errorf("error while sending lookups: %w", err)
 	}
 
-	outputData := s.addressSvc.BuildRawDataFromLookups(lookups)
+	outputData := s.addressSvc.BuildRawDataFromLookups(addresses, lookups)
 
 	err = s.csvSvc.WriteCSV(outputPath, outputData)
 	if err != nil {

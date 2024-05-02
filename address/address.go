@@ -32,16 +32,36 @@ func (s Service) BuildLookupsFromAddresses(addresses []entities.Address) []*stre
 	return lookups
 }
 
-func (s Service) BuildRawDataFromLookups(addresses []*street.Lookup) [][]string {
-	// TODO 
-	return nil
+func (s Service) BuildRawDataFromLookups(addresses []entities.Address, lookups []*street.Lookup) []string {
+	output := []string{}
+	for idx, lookup := range lookups {
+		outputString := ""
+		tempAddr := addresses[idx]
+		lookupAddr := lookup.Results[0]
+
+		if !tempAddr.Valid {
+			// TODO split the lastline to add comma?
+			outputString = tempAddr.Street + ", " + tempAddr.City + ", " + tempAddr.ZipCode + " -> Invalid Address"
+		} else {
+			// TODO split the lastline to add comma?
+			outputString = tempAddr.Street + ", " + tempAddr.City + ", " + tempAddr.ZipCode + " -> " + lookupAddr.DeliveryLine1 + ", " + lookupAddr.LastLine
+		}
+
+		output = append(output, outputString)
+	}
+
+	return output
 }
 
 // BuildAddresses takes in the raw CSV data and builds an address array
 func (s Service) BuildAddressesFromRawData(data [][]string) []entities.Address {
 	addresses := []entities.Address{}
-	for _, row := range data {
-		// TODO check if the initial rows are correct, just skip index 0?
+	for idx, row := range data {
+		// skip the column names
+		if idx == 0 {
+			continue
+		}
+
 		// check if the row is an invalid length
 		if len(row) < 3 || len(row) > 3 {
 			originString := ""
