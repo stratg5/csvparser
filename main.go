@@ -17,17 +17,23 @@ import (
 func main() {
 	var inputPath = flag.String("inputPath", "./input.csv", "the path to the csv, defaults to ./input.csv")
 	var outputPath = flag.String("outputPath", "./output.csv", "the path to the csv, defaults to ./output.csv")
-	var id = flag.String("apiID", "", "the api ID")
-	var token = flag.String("apiToken", "", "the api token")
+	var idFlag = flag.String("apiID", "", "the api ID")
+	var tokenFlag = flag.String("apiToken", "", "the api token")
 
 	flag.Parse()
 
-	println(*id)
-	println(*token)
+	id := entities.ID
+	token := entities.Token
 
-	// TODO check for the id and token in entities file, if not present then prompt
+	if *idFlag != "" {
+		id = *idFlag
+	}
 
-	addressSvc := address.NewService(wireup.BuildUSStreetAPIClient(wireup.SecretKeyCredential(entities.ID, entities.Token)))
+	if *tokenFlag != "" {
+		token = *tokenFlag
+	}
+
+	addressSvc := address.NewService(wireup.BuildUSStreetAPIClient(wireup.SecretKeyCredential(id, token)))
 	osToolSvc := ostools.NewService()
 	csvSvc := csv.NewService(osToolSvc)
 

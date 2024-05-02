@@ -5,7 +5,6 @@ import (
 	"encoding/csv"
 	"errors"
 	"fmt"
-	"os"
 )
 
 type Service struct {
@@ -35,11 +34,11 @@ func (s Service) ReadCSV(path string) ([][]string, error) {
 }
 
 func (s Service) WriteCSV(path string, records [][]string) error {
-	csvFile, err := os.Create(path)
+	csvFile, close, err := s.ostool.Create(path)
 	if err != nil {
 		return fmt.Errorf("error creating csv file: %w", err)
 	}
-	csvFile.Close()
+	defer close()
 
 	csvwriter := csv.NewWriter(csvFile)
 
