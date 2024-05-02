@@ -17,7 +17,7 @@ func NewService(addressSvc address.AddressProvider, csvSvc csv.CSVProvider) Serv
 	}
 }
 
-func (s Service) Run() {
+func (s Service) ParseCSVAndGenerateOutput(path string) {
 	// TODO
 	// Send the fields to the endpoint for verification
 	// Generate the output as a csv or as console output (flag for options)
