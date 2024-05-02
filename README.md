@@ -10,6 +10,12 @@ I have provided a pre-build binary that you can run, you just need to cd into th
 
 `./empora` on Mac, or `.\empora.exe` on Windows
 
+You may also build and run the app yourself:
+
+- With Go installed, cd into the project directory
+- run `go build`
+- a binary is output, run the binary as above, depending on your OS
+
 ## Flags
 
 You can pass a few different flags to make the program easier to use:
