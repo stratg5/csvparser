@@ -17,6 +17,7 @@ func NewService(ostool ostools.OSTooler) Service {
 }
 
 // ReadCSV reads the csv contents at the given path and returns the raw data plus error
+// Keeping the parsing logic separate from the reading of the csv in case this needs extended
 func (s Service) ReadCSV(path string) ([][]string, error) {
 	// Open the CSV file
 	file, close, err := s.ostool.Open(path)

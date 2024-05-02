@@ -46,6 +46,7 @@ func (s Service) SendLookups(lookups ...*street.Lookup) error {
 func (s Service) BuildAddressesFromRawData(data [][]string) []entities.Address {
 	addresses := []entities.Address{}
 	for _, row := range data {
+		// TODO check if the initial rows are correct, just skip index 0?
 		// check if the row is an invalid length
 		if len(row) < 3 || len(row) > 3 {
 			originString := ""
