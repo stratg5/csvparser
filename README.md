@@ -35,19 +35,9 @@ There are two ways to authenticate with the app:
 
 Using `api.go`
 
-You can set your API ID and token in /entities/api.go.
-This file is included in the .gitignore file so it won't be checked in.
+You can set your API ID and token in /entities/api.go, just replace the ID and token with your ID and token.
 
-Below is the format for this file:
-
-```
-const (
-  ID = "REPLACE_ME"
-  Token = "REPLACE_ME"
-)
-```
-
-If the file is not present, you can also pass the ID and token through the flags on startup:
+You can also pass the ID and token through the flags on startup:
 
 `empora -apiID "myID" -apiToken "myToken"`
 
