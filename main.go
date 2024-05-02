@@ -20,6 +20,8 @@ func main() {
 	var id = flag.String("apiID", "", "the api ID")
 	var token = flag.String("apiToken", "", "the api token")
 
+	flag.Parse()
+
 	println(*id)
 	println(*token)
 
@@ -30,5 +32,8 @@ func main() {
 	csvSvc := csv.NewService(osToolSvc)
 
 	driverSvc := driver.NewService(addressSvc, csvSvc)
-	driverSvc.ParseCSVAndGenerateOutput(*inputPath, *outputPath)
+	err := driverSvc.ParseCSVAndGenerateOutput(*inputPath, *outputPath)
+	if err != nil {
+		println(err.Error())
+	}
 }

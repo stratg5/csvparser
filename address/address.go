@@ -32,22 +32,22 @@ func (s Service) BuildLookupsFromAddresses(addresses []entities.Address) []*stre
 	return lookups
 }
 
-func (s Service) BuildRawDataFromLookups(addresses []entities.Address, lookups []*street.Lookup) []string {
-	output := []string{}
+func (s Service) BuildRawDataFromLookups(addresses []entities.Address, lookups []*street.Lookup) [][]string {
+	output := [][]string{}
 	for idx, lookup := range lookups {
-		outputString := ""
+		var cols []string
 		tempAddr := addresses[idx]
-		lookupAddr := lookup.Results[0]
 
-		if !tempAddr.Valid {
+		if !tempAddr.Valid || len(lookup.Results) == 0 {
 			// TODO split the lastline to add comma?
-			outputString = tempAddr.Street + ", " + tempAddr.City + ", " + tempAddr.ZipCode + " -> Invalid Address"
+			cols = []string{tempAddr.Street, " " +tempAddr.City, tempAddr.ZipCode + " -> Invalid Address"}
 		} else {
+			lookupAddr := lookup.Results[0]
 			// TODO split the lastline to add comma?
-			outputString = tempAddr.Street + ", " + tempAddr.City + ", " + tempAddr.ZipCode + " -> " + lookupAddr.DeliveryLine1 + ", " + lookupAddr.LastLine
+			cols = []string{tempAddr.Street, " " + tempAddr.City, " " + tempAddr.ZipCode + " -> " + lookupAddr.DeliveryLine1, " " + lookupAddr.LastLine}
 		}
 
-		output = append(output, outputString)
+		output = append(output, cols)
 	}
 
 	return output

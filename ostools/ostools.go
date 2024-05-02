@@ -19,3 +19,9 @@ func (s Service) Open(path string) (io.Reader, func() error, error) {
 	f, err := os.Open(path)
 	return f, f.Close, err
 }
+
+// Create creates a file, it is isolated to its most basic form for easy mocking
+func (s Service) Create(path string) (io.Writer, func() error, error) {
+	f, err := os.Create(path)
+	return f, f.Close, err
+}

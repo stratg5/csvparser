@@ -4,6 +4,21 @@
 
 # Thought process and choices
 
+## Running the app
+
+I have provided a pre-build binary that you can run, you just need to cd into the directory where it lives and run:
+
+`./empora` on Mac, or `.\empora.exe` on Windows
+
+## Flags
+
+You can pass a few different flags to make the program easier to use:
+
+`-inputPath` is the path to the input csv file. It defaults to `./input.csv'
+`-outputPath`is the path to the output csv file. It defaults to`./output.csv'
+`-id` can be used to pass your smarty ID to the app if its not set in the api.go file (more on that below)
+`-token` can be used to pass your smarty token to the app if its not set in the api.go file (more on that below)
+
 ## Components
 
 Services
@@ -58,9 +73,7 @@ Because we accept interfaces for our functions, we can create mocked implementat
 
 With the mocked implementations, we have full control over the behavior of the application and can test multiple scenarios.
 
-## Packages
-
-### Naming
+## Package Naming
 
 Why are your packages named like that? The answer to this is that this is the Golang standard :)
 
@@ -70,7 +83,7 @@ consistent code bases and is a familiar sight to those who write code in Go. Thi
 There is a lot of debate about camel case, snake case, etc. for naming in a lot of areas, but consistency is more important than
 which one is "right". I'm a big believer in consistency. Let's decide on the best option, and then once its decided lets stay consistent.
 
-### Division
+## Package Structure
 
 I've created an address client that can perform address-related actions. This felt like a logical separation to me, it could be extended
 in the future to perform additional address-related tasks.
@@ -81,3 +94,12 @@ In the future, this could be broken out into smaller files under the entities pa
 The entities could be placed into the package that uses them (i.e. the `Address` struct goes in the address client), but some entities are used by
 multiple actors. Then entities start to get placed in specific packages and universal locations which can get messy. This provides one location to
 access entities.
+
+## Output
+
+Output is one part that I would definitely talk to someone about if I were actually implementing this for a project. The desired output is a bit odd
+to fit into a csv, it would be better as a text file or to change the output so it is better suited for csv.
+
+The `->` with address data on either side especially felt like a format that was not well suited to csv, as well as some of the spacing before fields.
+Ultimately I went with csv output since the input was csv, but its something I would want to discuss with the people using the output of the report to
+try and determine if maybe we can better suit their needs.
