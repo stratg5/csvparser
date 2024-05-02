@@ -3,31 +3,29 @@ package address
 import (
 	"empora/entities"
 	"fmt"
+	"strings"
 
 	street "github.com/smartystreets/smartystreets-go-sdk/us-street-api"
 )
 
-// TODO rename this?
-// TODO decide if we want to break out the low level stuff to another place/encapsulate it
-
-type Client struct {
+type Service struct {
 	LookupClient LookupSender
 }
 
-// NewClient generates a new address client
-// This client currently only has the ability to perform lookups but could be extended
-func NewClient(lookupSender LookupSender) Client {
-	return Client{
+// NewService generates a new address service
+// This client currently has the ability to perform lookups but could be extended in the future
+func NewService(lookupSender LookupSender) Service {
+	return Service{
 		LookupClient: lookupSender,
 	}
 }
 
-func (c Client) BuildLookups(addresses []entities.Address) []*street.Lookup {
+func (s Service) BuildLookups(addresses []entities.Address) []*street.Lookup {
 	lookups := []*street.Lookup{}
 	for _, address := range addresses {
 		lookups = append(lookups, &street.Lookup{
-			Street: address.Street,
-			City: address.Street,
+			Street:  address.Street,
+			City:    address.Street,
 			ZIPCode: address.ZipCode,
 		})
 	}
@@ -35,11 +33,44 @@ func (c Client) BuildLookups(addresses []entities.Address) []*street.Lookup {
 	return lookups
 }
 
-func (c Client) SendLookups(lookups ...*street.Lookup) error {
-	err := c.LookupClient.SendLookups(lookups...)
+func (s Service) SendLookups(lookups ...*street.Lookup) error {
+	err := s.LookupClient.SendLookups(lookups...)
 	if err != nil {
 		return fmt.Errorf("error while sending lookups: %w", err)
 	}
 
 	return nil
+}
+
+// BuildAddresses takes in the raw CSV data and builds an entity array
+func (s Service) BuildAddressesFromRawData(data [][]string) []entities.Address {
+	addresses := []entities.Address{}
+	for _, row := range data {
+		// check if the row is an invalid length
+		if len(row) < 3 || len(row) > 3 {
+			originString := ""
+			for _, col := range row {
+				originString += col
+			}
+
+			address := entities.Address{
+				OriginString: originString,
+				Valid:        false,
+			}
+
+			addresses = append(addresses, address)
+			continue
+		}
+
+		// trim the leading and trailing spaces from the data
+		address := entities.Address{
+			Street:  strings.TrimSpace(row[0]),
+			City:    strings.TrimSpace(row[1]),
+			ZipCode: strings.TrimSpace(row[2]),
+			Valid:   true,
+		}
+
+		addresses = append(addresses, address)
+	}
+	return addresses
 }
