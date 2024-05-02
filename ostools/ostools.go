@@ -8,6 +8,8 @@ import (
 type Service struct{}
 
 // NewService provides a service for interacting with the OS, which can easily be mocked
+// This service implements an interface which is what gets passed to other services
+// Please see mocks.go in the same package for the mock implementation
 func NewService() Service {
 	return Service{}
 }

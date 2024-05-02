@@ -18,22 +18,27 @@ func NewService(addressSvc address.AddressProvider, csvSvc csv.CSVProvider) Serv
 	}
 }
 
-func (s Service) ParseCSVAndGenerateOutput(path string) error {
-	rawData, err := s.csvSvc.ReadCSV(path)
+func (s Service) ParseCSVAndGenerateOutput(inputPath, outputPath string) error {
+	rawData, err := s.csvSvc.ReadCSV(inputPath)
 	if err != nil {
 		return fmt.Errorf("error while parsing csv: %w", err)
 	}
 
 	addresses := s.addressSvc.BuildAddressesFromRawData(rawData)
 
-	lookups := s.addressSvc.BuildLookups(addresses)
+	lookups := s.addressSvc.BuildLookupsFromAddresses(addresses)
 
 	err = s.addressSvc.SendLookups(lookups...)
 	if err != nil {
 		return fmt.Errorf("error while sending lookups: %w", err)
 	}
-	
-	// TODO
-	// Generate the output as a csv or as console output (flag for options)
+
+	outputData := s.addressSvc.BuildRawDataFromLookups(lookups)
+
+	err = s.csvSvc.WriteCSV(outputPath, outputData)
+	if err != nil {
+		return fmt.Errorf("error while writing output to csv: %w", err)
+	}
+
 	return nil
 }

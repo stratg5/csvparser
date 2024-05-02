@@ -3,7 +3,9 @@ package csv
 import (
 	"empora/ostools"
 	"encoding/csv"
+	"errors"
 	"fmt"
+	"os"
 )
 
 type Service struct {
@@ -30,4 +32,24 @@ func (s Service) ReadCSV(path string) ([][]string, error) {
 	reader := csv.NewReader(file)
 	reader.FieldsPerRecord = -1
 	return reader.ReadAll()
+}
+
+func (s Service) WriteCSV(path string, records [][]string) error {
+	csvFile, err := os.Create(path)
+	if err != nil {
+		return fmt.Errorf("error creating csv file: %w", err)
+	}
+	csvFile.Close()
+
+	csvwriter := csv.NewWriter(csvFile)
+
+	for _, record := range records {
+		writeErr := csvwriter.Write(record)
+		if err != nil {
+			err = errors.Join(err, writeErr)
+		}
+	}
+	csvwriter.Flush()
+
+	return err
 }

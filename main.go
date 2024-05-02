@@ -15,7 +15,8 @@ import (
 // the driver service coordinates the individual pieces
 // this makes mocking and testing much easier and more complete
 func main() {
-	var csvPath = flag.String("csvPath", "./addresses.csv", "the path to the csv, defaults to ./addresses.csv")
+	var inputPath = flag.String("inputPath", "./input.csv", "the path to the csv, defaults to ./input.csv")
+	var outputPath = flag.String("outputPath", "./output.csv", "the path to the csv, defaults to ./output.csv")
 	var id = flag.String("apiID", "", "the api ID")
 	var token = flag.String("apiToken", "", "the api token")
 
@@ -29,5 +30,5 @@ func main() {
 	csvSvc := csv.NewService(osToolSvc)
 
 	driverSvc := driver.NewService(addressSvc, csvSvc)
-	driverSvc.ParseCSVAndGenerateOutput(*csvPath)
+	driverSvc.ParseCSVAndGenerateOutput(*inputPath, *outputPath)
 }

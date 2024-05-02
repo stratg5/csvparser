@@ -9,18 +9,17 @@ import (
 )
 
 type Service struct {
-	LookupClient LookupSender
+	LookupClient lookupSender
 }
 
-// NewService generates a new address service
-// This client currently has the ability to perform lookups but could be extended in the future
-func NewService(lookupSender LookupSender) Service {
+// the address service handles any address related operations including sending and formatting
+func NewService(lookupSender lookupSender) Service {
 	return Service{
 		LookupClient: lookupSender,
 	}
 }
 
-func (s Service) BuildLookups(addresses []entities.Address) []*street.Lookup {
+func (s Service) BuildLookupsFromAddresses(addresses []entities.Address) []*street.Lookup {
 	lookups := []*street.Lookup{}
 	for _, address := range addresses {
 		lookups = append(lookups, &street.Lookup{
@@ -33,16 +32,12 @@ func (s Service) BuildLookups(addresses []entities.Address) []*street.Lookup {
 	return lookups
 }
 
-func (s Service) SendLookups(lookups ...*street.Lookup) error {
-	err := s.LookupClient.SendLookups(lookups...)
-	if err != nil {
-		return fmt.Errorf("error while sending lookups: %w", err)
-	}
-
+func (s Service) BuildRawDataFromLookups(addresses []*street.Lookup) [][]string {
+	// TODO 
 	return nil
 }
 
-// BuildAddresses takes in the raw CSV data and builds an entity array
+// BuildAddresses takes in the raw CSV data and builds an address array
 func (s Service) BuildAddressesFromRawData(data [][]string) []entities.Address {
 	addresses := []entities.Address{}
 	for _, row := range data {
@@ -74,4 +69,13 @@ func (s Service) BuildAddressesFromRawData(data [][]string) []entities.Address {
 		addresses = append(addresses, address)
 	}
 	return addresses
+}
+
+func (s Service) SendLookups(lookups ...*street.Lookup) error {
+	err := s.LookupClient.SendLookups(lookups...)
+	if err != nil {
+		return fmt.Errorf("error while sending lookups: %w", err)
+	}
+
+	return nil
 }

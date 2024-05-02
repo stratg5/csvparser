@@ -7,11 +7,13 @@ import (
 )
 
 type AddressProvider interface {
-	BuildLookups(addresses []entities.Address) []*street.Lookup
-	SendLookups(lookups ...*street.Lookup) error
+	BuildLookupsFromAddresses(addresses []entities.Address) []*street.Lookup
 	BuildAddressesFromRawData(data [][]string) []entities.Address
+	BuildRawDataFromLookups(addresses []*street.Lookup) [][]string
+
+	SendLookups(lookups ...*street.Lookup) error
 }
 
-type LookupSender interface {
+type lookupSender interface {
 	SendLookups(lookups ...*street.Lookup) error
 }
