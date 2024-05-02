@@ -9,7 +9,7 @@ import (
 type AddressProvider interface {
 	BuildLookupsFromAddresses(addresses []entities.Address) []*street.Lookup
 	BuildAddressesFromRawData(data [][]string) []entities.Address
-	BuildRawDataFromLookups(addresses []entities.Address, lookups []*street.Lookup) []string
+	BuildRawDataFromLookups(addresses []entities.Address, lookups []*street.Lookup) ([]string, error)
 
 	SendLookups(lookups ...*street.Lookup) error
 }

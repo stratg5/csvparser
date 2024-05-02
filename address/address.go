@@ -2,6 +2,7 @@ package address
 
 import (
 	"empora/entities"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -24,7 +25,7 @@ func (s Service) BuildLookupsFromAddresses(addresses []entities.Address) []*stre
 	for _, address := range addresses {
 		lookups = append(lookups, &street.Lookup{
 			Street:  address.Street,
-			City:    address.Street,
+			City:    address.City,
 			ZIPCode: address.ZipCode,
 		})
 	}
@@ -32,28 +33,7 @@ func (s Service) BuildLookupsFromAddresses(addresses []entities.Address) []*stre
 	return lookups
 }
 
-func (s Service) BuildRawDataFromLookups(addresses []entities.Address, lookups []*street.Lookup) []string {
-	output := []string{}
-	for idx, lookup := range lookups {
-		var addrLine string
-		tempAddr := addresses[idx]
-
-		if !tempAddr.Valid || len(lookup.Results) == 0 {
-			// TODO split the lastline to add comma?
-			addrLine = tempAddr.Street +", " +tempAddr.City + ", " + tempAddr.ZipCode + " -> Invalid Address"
-		} else {
-			lookupAddr := lookup.Results[0]
-			// TODO split the lastline to add comma?
-			addrLine = tempAddr.Street+ ", " + tempAddr.City +", " + tempAddr.ZipCode + " -> " + lookupAddr.DeliveryLine1 + ", " + lookupAddr.LastLine
-		}
-
-		output = append(output, addrLine)
-	}
-
-	return output
-}
-
-// BuildAddresses takes in the raw CSV data and builds an address array
+// BuildAddressesFromRawData takes in the raw CSV data and builds an address array
 func (s Service) BuildAddressesFromRawData(data [][]string) []entities.Address {
 	addresses := []entities.Address{}
 	for idx, row := range data {
@@ -65,8 +45,12 @@ func (s Service) BuildAddressesFromRawData(data [][]string) []entities.Address {
 		// check if the row is an invalid length
 		if len(row) < 3 || len(row) > 3 {
 			originString := ""
-			for _, col := range row {
+			for idx, col := range row {
 				originString += col
+
+				if idx < len(row) -1 && len(row) > 1 {
+					originString += ", "
+				}
 			}
 
 			address := entities.Address{
@@ -90,6 +74,35 @@ func (s Service) BuildAddressesFromRawData(data [][]string) []entities.Address {
 	}
 	return addresses
 }
+
+// Builds the output based on address and lookup arrays
+// If the array sizes don't match, return an error
+func (s Service) BuildRawDataFromLookups(addresses []entities.Address, lookups []*street.Lookup) ([]string, error) {
+	output := []string{}
+
+	if len(addresses) != len(lookups) {
+		return nil, errors.New("address and lookup lengths don't match")
+	}
+
+	for idx, lookup := range lookups {
+		var addrLine string
+		tempAddr := addresses[idx]
+
+		if !tempAddr.Valid || len(lookup.Results) == 0 {
+			// TODO split the lastline to add comma?
+			addrLine = tempAddr.OriginString + " -> Invalid Address"
+		} else {
+			lookupAddr := lookup.Results[0]
+			// TODO split the lastline to add comma?
+			addrLine = tempAddr.Street+ ", " + tempAddr.City +", " + tempAddr.ZipCode + " -> " + lookupAddr.DeliveryLine1 + ", " + lookupAddr.LastLine
+		}
+
+		output = append(output, addrLine)
+	}
+
+	return output, nil
+}
+
 
 func (s Service) SendLookups(lookups ...*street.Lookup) error {
 	err := s.LookupClient.SendLookups(lookups...)
