@@ -4,6 +4,31 @@
 
 # Thought process and choices
 
+## Components
+
+Services
+
+You will see that almost all packages implement a Service. These services are the main drivers behind the functionality.
+
+They are all named the same, since in Go the package is more important.
+
+This way we get nice initialization calls like `csv.NewService()`
+
+Contracts
+
+You will also notice that each package has a contracts file. This is where we define the interfaces that are implemented
+in each of the packages.
+
+This is very important for mocking.
+
+Mocks
+
+You will also find a mocks file in each of the packages. This is where we have a separate mock implementation of the contracts.
+
+These mock implementations can provide a way to override the functionality, while still implementing the interface.
+
+The mocks can be passed anywhere that an interface is expected and the mocks match that interface.
+
 ## Authentication
 
 There are two ways to authenticate with the app:
