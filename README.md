@@ -6,15 +6,16 @@
 
 ## Running the app
 
-I have provided a pre-build binary that you can run, you just need to cd into the directory where it lives and run:
+I have provided a few pre-built binaries that you can run, you just need to cd into the directory where they live and run:
 
-`./empora` on Mac, or `.\empora.exe` on Windows
+`./empora-darwin-amd64` on Mac (or `./empora-darwin-arm64` for M architecture), or `.\empora.exe` on Windows.
 
 You may also build and run the app yourself:
 
 - With Go installed, cd into the project directory
 - run `go build`
 - a binary is output, run the binary as above, depending on your OS
+- Note: you can also run `go run main.go`, which will run the app directly from the code
 
 ## Flags
 
@@ -25,9 +26,11 @@ You can pass a few different flags to make the program easier to use:
 `-id` can be used to pass your smarty ID to the app if its not set in the api.go file (more on that below)
 `-token` can be used to pass your smarty token to the app if its not set in the api.go file (more on that below)
 
+Example: `./empora-darwin-amd64 -inputPath ./input.csv -outputPath ./output.csv -id YOUR_SMARTY_ID -token YOUR_SMARTY_TOKEN`
+
 ## Components
 
-Services
+**Services**
 
 You will see that almost all packages implement a Service. These services are the main drivers behind the functionality.
 
@@ -35,14 +38,14 @@ They are all named the same, since in Go the package is more important.
 
 This way we get nice initialization calls like `csv.NewService()`
 
-Contracts
+**Contracts**
 
 You will also notice that each package has a contracts file. This is where we define the interfaces that are implemented
 in each of the packages.
 
 This is very important for mocking.
 
-Mocks
+**Mocks**
 
 You will also find a mocks file in each of the packages. This is where we have a separate mock implementation of the contracts.
 
@@ -91,7 +94,7 @@ which one is "right". I'm a big believer in consistency. Let's decide on the bes
 
 ## Package Structure
 
-I've created an address client that can perform address-related actions. This felt like a logical separation to me, it could be extended
+I've created an address client that can perform address-related actions. This felt like a logical separation to me, and it could be extended
 in the future to perform additional address-related tasks.
 
 I've created an entities package to hold all of the objects. This gives a single location to access each of the entities for the application.
@@ -100,6 +103,9 @@ In the future, this could be broken out into smaller files under the entities pa
 The entities could be placed into the package that uses them (i.e. the `Address` struct goes in the address client), but some entities are used by
 multiple actors. Then entities start to get placed in specific packages and universal locations which can get messy. This provides one location to
 access entities.
+
+`main.go` is responsible for initializing all the dependencies and kicking off the main flow. This is where all of the real implementations get created
+and injected into the services responsible for performing the logic.
 
 ## Output
 
