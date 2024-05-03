@@ -19,6 +19,10 @@ You may also build and run the app yourself:
 - A binary is output, run the binary as above, depending on your OS
 - Note: you can also run `go run main.go`, which will run the app directly from the code
 
+## Running the tests
+
+With go installed and a terminal open to the top level directory, run `go test ./...`. This will run all tests.
+
 ## Flags
 
 You can pass a few different flags to make the program easier to use:
