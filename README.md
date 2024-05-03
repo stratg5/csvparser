@@ -10,11 +10,13 @@ I have provided a few pre-built binaries that you can run, you just need to cd i
 
 `./empora-darwin-amd64` on Mac (or `./empora-darwin-arm64` for M architecture), or `.\empora.exe` on Windows.
 
+If you are running Windows or Mac, these binaries should be natively compiled and work out of the box, you do not need a runtime.
+
 You may also build and run the app yourself:
 
-- With Go installed, cd into the project directory
-- run `go build`
-- a binary is output, run the binary as above, depending on your OS
+- With Go installed (https://go.dev/doc/install), cd into the project directory
+- Run `go build`
+- A binary is output, run the binary as above, depending on your OS
 - Note: you can also run `go run main.go`, which will run the app directly from the code
 
 ## Flags
