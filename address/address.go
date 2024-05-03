@@ -42,17 +42,17 @@ func (s Service) BuildAddressesFromRawData(data [][]string) []entities.Address {
 			continue
 		}
 
+		originString := ""
+		for idx, col := range row {
+			originString += col
+
+			if idx < len(row) -1 && len(row) > 1 {
+				originString += ", "
+			}
+		}
+
 		// check if the row is an invalid length
 		if len(row) < 3 || len(row) > 3 {
-			originString := ""
-			for idx, col := range row {
-				originString += col
-
-				if idx < len(row) -1 && len(row) > 1 {
-					originString += ", "
-				}
-			}
-
 			address := entities.Address{
 				OriginString: originString,
 				Valid:        false,
@@ -67,6 +67,7 @@ func (s Service) BuildAddressesFromRawData(data [][]string) []entities.Address {
 			Street:  strings.TrimSpace(row[0]),
 			City:    strings.TrimSpace(row[1]),
 			ZipCode: strings.TrimSpace(row[2]),
+			OriginString: originString,
 			Valid:   true,
 		}
 

@@ -223,6 +223,7 @@ func TestBuildAddressesFromRawData(t *testing.T) {
 					Street: "123 Main Street",
 					City: "Columbus",
 					ZipCode: "43212",
+					OriginString: "123 Main Street, Columbus, 43212",
 					Valid: true,
 				},
 			},
