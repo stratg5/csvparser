@@ -1,9 +1,3 @@
-# How to run the code
-
-# How to run the tests
-
-# Thought process and choices
-
 ## Running the app
 
 I have provided a few pre-built binaries that you can run, you just need to cd into the directory where they live and run:
