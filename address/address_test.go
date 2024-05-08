@@ -157,7 +157,7 @@ func TestBuildRawDataFromLookups(t *testing.T) {
 					Results: []*street.Candidate{
 						{
 							DeliveryLine1: "street1",
-							LastLine: "city1, zip1",
+							LastLine: "city1 state1 zip1",
 						},
 					},
 				},
