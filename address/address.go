@@ -90,12 +90,13 @@ func (s Service) BuildRawDataFromLookups(addresses []entities.Address, lookups [
 		tempAddr := addresses[idx]
 
 		if !tempAddr.Valid || len(lookup.Results) == 0 {
-			// TODO split the lastline to add comma?
+			
 			addrLine = tempAddr.OriginString + " -> Invalid Address"
 		} else {
 			lookupAddr := lookup.Results[0]
-			// TODO split the lastline to add comma?
-			addrLine = tempAddr.Street+ ", " + tempAddr.City +", " + tempAddr.ZipCode + " -> " + lookupAddr.DeliveryLine1 + ", " + lookupAddr.LastLine
+			splitLastLine := strings.TrimSpace(lookupAddr.LastLine)
+			addrParts := strings.Split(splitLastLine, " ")
+			addrLine = tempAddr.Street+ ", " + tempAddr.City +", " + tempAddr.ZipCode + " -> " + lookupAddr.DeliveryLine1 + ", " + addrParts[0] + ", " + addrParts[1]
 		}
 
 		output = append(output, addrLine)
