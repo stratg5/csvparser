@@ -96,7 +96,12 @@ func (s Service) BuildRawDataFromLookups(addresses []entities.Address, lookups [
 			lookupAddr := lookup.Results[0]
 			splitLastLine := strings.TrimSpace(lookupAddr.LastLine)
 			addrParts := strings.Split(splitLastLine, " ")
-			addrLine = tempAddr.Street+ ", " + tempAddr.City +", " + tempAddr.ZipCode + " -> " + lookupAddr.DeliveryLine1 + ", " + addrParts[0] + ", " + addrParts[2]
+
+			if len(addrParts) < 3 {
+				addrLine = tempAddr.OriginString + " -> Invalid Address"
+			} else {
+				addrLine = tempAddr.Street+ ", " + tempAddr.City +", " + tempAddr.ZipCode + " -> " + lookupAddr.DeliveryLine1 + ", " + addrParts[0] + ", " + addrParts[2]
+			}
 		}
 
 		output = append(output, addrLine)
