@@ -1,2 +1,6 @@
+github.com/smarty/assertions v1.15.1 h1:812oFiXI+G55vxsFf+8bIZ1ux30qtkdqzKbEFwyX3Tk=
+github.com/smarty/assertions v1.15.1/go.mod h1:yABtdzeQs6l1brC900WlRNwj6ZR55d7B+E8C6HtKdec=
+github.com/smarty/gunit v1.5.0 h1:OmG6a/rgi7qCjlQis6VjXbvx/WqZ8I6xSlbfN4YB5MY=
+github.com/smarty/gunit v1.5.0/go.mod h1:uAeNibUD292KZRcg5OTy7lb6WR5++UC0BQOzNuiRzpU=
 github.com/smartystreets/smartystreets-go-sdk v1.19.3 h1:t4zYTjPtpQZUnt09kaj/KhkLTx3l7S5znuhKdV0NM4U=
 github.com/smartystreets/smartystreets-go-sdk v1.19.3/go.mod h1:DLwgFA+W3P1dtfl3cHz6sQD8xGuPpyiEph5nB0v7DIs=

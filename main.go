@@ -1,11 +1,11 @@
 package main
 
 import (
-	"empora/address"
-	"empora/csv"
-	"empora/driver"
-	"empora/entities"
-	"empora/ostools"
+	"csvparser/address"
+	"csvparser/csv"
+	"csvparser/driver"
+	"csvparser/entities"
+	"csvparser/ostools"
 	"flag"
 
 	"github.com/smartystreets/smartystreets-go-sdk/wireup"

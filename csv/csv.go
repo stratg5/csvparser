@@ -1,7 +1,7 @@
 package csv
 
 import (
-	"empora/ostools"
+	"csvparser/ostools"
 	"encoding/csv"
 	"errors"
 	"fmt"

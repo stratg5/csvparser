@@ -1,9 +1,9 @@
 package driver
 
 import (
-	"empora/address"
-	"empora/csv"
-	"empora/entities"
+	"csvparser/address"
+	"csvparser/csv"
+	"csvparser/entities"
 	"errors"
 	"testing"
 

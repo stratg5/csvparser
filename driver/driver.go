@@ -1,8 +1,8 @@
 package driver
 
 import (
-	"empora/address"
-	"empora/csv"
+	"csvparser/address"
+	"csvparser/csv"
 	"fmt"
 )
 

@@ -1,7 +1,7 @@
 package address
 
 import (
-	"empora/entities"
+	"csvparser/entities"
 	"errors"
 	"fmt"
 	"strings"

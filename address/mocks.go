@@ -1,7 +1,7 @@
 package address
 
 import (
-	"empora/entities"
+	"csvparser/entities"
 
 	street "github.com/smartystreets/smartystreets-go-sdk/us-street-api"
 )

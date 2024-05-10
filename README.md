@@ -2,7 +2,7 @@
 
 I have provided a few pre-built binaries that you can run, you just need to cd into the directory where they live and run:
 
-`./empora-darwin-amd64` on Mac (or `./empora-darwin-arm64` for M architecture), or `.\empora.exe` on Windows.
+`./parser-darwin-amd64` on Mac (or `./parser-darwin-arm64` for M architecture), or `.\parser.exe` on Windows.
 
 If you are running Windows or Mac, these binaries should be natively compiled and work out of the box, you do not need a runtime.
 
@@ -26,7 +26,7 @@ You can pass a few different flags to make the program easier to use:
 `-id` can be used to pass your smarty ID to the app if its not set in the api.go file (more on that below)
 `-token` can be used to pass your smarty token to the app if its not set in the api.go file (more on that below)
 
-Example: `./empora-darwin-amd64 -inputPath ./input.csv -outputPath ./output.csv -id YOUR_SMARTY_ID -token YOUR_SMARTY_TOKEN`
+Example: `./parser-darwin-amd64 -inputPath ./input.csv -outputPath ./output.csv -id YOUR_SMARTY_ID -token YOUR_SMARTY_TOKEN`
 
 ## Components
 
@@ -63,7 +63,7 @@ You can set your API ID and token in /entities/api.go, just replace the ID and t
 
 You can also pass the ID and token through the flags on startup:
 
-`empora -apiID "myID" -apiToken "myToken"`
+`parser -id "myID" -token "myToken"`
 
 ## Smarty SDK
 
