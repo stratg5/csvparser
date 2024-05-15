@@ -12,83 +12,83 @@ import (
 
 func TestParseCSVAndGenerateOutput(t *testing.T) {
 	type test struct {
-		desc             string
+		desc string
 
-		readCSVError error
-		writeCSVError error
-		sendLookupsError error
+		readCSVError      error
+		writeCSVError     error
+		sendLookupsError  error
 		buildRawDataError error
 
-		expectedWriteCSVCount int
-		expectedReadCSVCount int
+		expectedWriteCSVCount       int
+		expectedReadCSVCount        int
 		expectedBuildAddressesCount int
-		expectedBuildLookupsCount int
-		expectedSendLookupsCount int
-		expectedBuildRawDataCount int
-		expectedErr string
+		expectedBuildLookupsCount   int
+		expectedSendLookupsCount    int
+		expectedBuildRawDataCount   int
+		expectedErr                 string
 	}
 
 	tests := []test{
 		{
-			desc:             "no errors",
-			expectedWriteCSVCount: 1,
-			expectedReadCSVCount: 1,
+			desc:                        "no errors",
+			expectedWriteCSVCount:       1,
+			expectedReadCSVCount:        1,
 			expectedBuildAddressesCount: 1,
-			expectedBuildLookupsCount: 1,
-			expectedSendLookupsCount: 1,
-			expectedBuildRawDataCount: 1,
+			expectedBuildLookupsCount:   1,
+			expectedSendLookupsCount:    1,
+			expectedBuildRawDataCount:   1,
 		},
 		{
-			desc:             "read csv errors",
+			desc: "read csv errors",
 
 			readCSVError: errors.New("csv error"),
 
-			expectedErr: "error while parsing csv: csv error",
-			expectedWriteCSVCount: 0,
-			expectedReadCSVCount: 1,
+			expectedErr:                 "error while parsing csv: csv error",
+			expectedWriteCSVCount:       0,
+			expectedReadCSVCount:        1,
 			expectedBuildAddressesCount: 0,
-			expectedBuildLookupsCount: 0,
-			expectedSendLookupsCount: 0,
-			expectedBuildRawDataCount: 0,
+			expectedBuildLookupsCount:   0,
+			expectedSendLookupsCount:    0,
+			expectedBuildRawDataCount:   0,
 		},
 		{
-			desc:             "write csv errors",
+			desc: "write csv errors",
 
 			writeCSVError: errors.New("write csv error"),
 
-			expectedErr: "error while writing output to csv: write csv error",
-			expectedWriteCSVCount: 1,
-			expectedReadCSVCount: 1,
+			expectedErr:                 "error while writing output to csv: write csv error",
+			expectedWriteCSVCount:       1,
+			expectedReadCSVCount:        1,
 			expectedBuildAddressesCount: 1,
-			expectedBuildLookupsCount: 1,
-			expectedSendLookupsCount: 1,
-			expectedBuildRawDataCount: 1,
+			expectedBuildLookupsCount:   1,
+			expectedSendLookupsCount:    1,
+			expectedBuildRawDataCount:   1,
 		},
 		{
-			desc:             "send lookups errors",
+			desc: "send lookups errors",
 
 			sendLookupsError: errors.New("send lookups error"),
 
-			expectedErr: "error while sending lookups: send lookups error",
-			expectedWriteCSVCount: 0,
-			expectedReadCSVCount: 1,
+			expectedErr:                 "error while sending lookups: send lookups error",
+			expectedWriteCSVCount:       0,
+			expectedReadCSVCount:        1,
 			expectedBuildAddressesCount: 1,
-			expectedBuildLookupsCount: 1,
-			expectedSendLookupsCount: 1,
-			expectedBuildRawDataCount: 0,
+			expectedBuildLookupsCount:   1,
+			expectedSendLookupsCount:    1,
+			expectedBuildRawDataCount:   0,
 		},
 		{
-			desc:             "build raw data errors",
+			desc: "build raw data errors",
 
 			buildRawDataError: errors.New("build raw data error"),
 
-			expectedErr: "error while building raw data: build raw data error",
-			expectedWriteCSVCount: 0,
-			expectedReadCSVCount: 1,
+			expectedErr:                 "error while building raw data: build raw data error",
+			expectedWriteCSVCount:       0,
+			expectedReadCSVCount:        1,
 			expectedBuildAddressesCount: 1,
-			expectedBuildLookupsCount: 1,
-			expectedSendLookupsCount: 1,
-			expectedBuildRawDataCount: 1,
+			expectedBuildLookupsCount:   1,
+			expectedSendLookupsCount:    1,
+			expectedBuildRawDataCount:   1,
 		},
 	}
 
@@ -132,11 +132,11 @@ func TestParseCSVAndGenerateOutput(t *testing.T) {
 		err := s.ParseCSVAndGenerateOutput("", "")
 		if err != nil {
 			if test.expectedErr == "" {
-				t.Fatalf(test.desc + ": expected no error but got one: %s", err.Error())
+				t.Fatalf(test.desc+": expected no error but got one: %s", err.Error())
 			}
 
 			if err.Error() != test.expectedErr {
-				t.Fatalf(test.desc + ": expected no error but got one: %s", err.Error())
+				t.Fatalf(test.desc+": expected no error but got one: %s", err.Error())
 			}
 		}
 

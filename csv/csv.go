@@ -40,7 +40,6 @@ func (s Service) WriteCSV(path string, records []string) error {
 	}
 	defer close()
 
-
 	for _, record := range records {
 		_, writeErr := csvFile.Write([]byte(record + "\n"))
 		if err != nil {
@@ -50,4 +49,3 @@ func (s Service) WriteCSV(path string, records []string) error {
 
 	return err
 }
-

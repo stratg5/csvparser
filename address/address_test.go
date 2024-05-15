@@ -11,54 +11,54 @@ import (
 
 func TestBuildLookupsFromAddresses(t *testing.T) {
 	type test struct {
-		desc             string
-		addresses         []entities.Address
+		desc            string
+		addresses       []entities.Address
 		expectedLookups []*street.Lookup
 	}
 
 	tests := []test{
 		{
-			desc:             "empty address array gives empty lookups",
-			addresses: []entities.Address{},
+			desc:            "empty address array gives empty lookups",
+			addresses:       []entities.Address{},
 			expectedLookups: []*street.Lookup{},
 		},
 		{
-			desc:             "with one address",
+			desc: "with one address",
 			addresses: []entities.Address{
 				{
-					Street: "street1",
-					City: "city1",
+					Street:  "street1",
+					City:    "city1",
 					ZipCode: "zip1",
 				},
 			},
 			expectedLookups: []*street.Lookup{
-					{
-						Street: "street1",
-						City: "city1",
-						ZIPCode: "zip1",
-					},
+				{
+					Street:  "street1",
+					City:    "city1",
+					ZIPCode: "zip1",
+				},
 			},
 		},
 		{
-			desc:             "with multiple addresses",
+			desc: "with multiple addresses",
 			addresses: []entities.Address{
 				{
-					Street: "street1",
-					City: "city1",
+					Street:  "street1",
+					City:    "city1",
 					ZipCode: "zip1",
 				},
 				{
-					Street: "street2",
-					City: "city2",
+					Street:  "street2",
+					City:    "city2",
 					ZipCode: "zip2",
 				},
 			},
 			expectedLookups: []*street.Lookup{
-					{
-						Street: "street2",
-						City: "city2",
-						ZIPCode: "zip2",
-					},
+				{
+					Street:  "street2",
+					City:    "city2",
+					ZIPCode: "zip2",
+				},
 			},
 		},
 	}
@@ -85,10 +85,10 @@ func TestBuildLookupsFromAddresses(t *testing.T) {
 func TestBuildRawDataFromLookups(t *testing.T) {
 	type test struct {
 		desc             string
-		addresses         []entities.Address
-		lookups []*street.Lookup
+		addresses        []entities.Address
+		lookups          []*street.Lookup
 		expectedContents []string
-		expectedErr string
+		expectedErr      string
 	}
 
 	tests := []test{
@@ -97,72 +97,98 @@ func TestBuildRawDataFromLookups(t *testing.T) {
 			expectedContents: []string{},
 		},
 		{
-			desc:             "addresses only",
+			desc: "addresses only",
 			addresses: []entities.Address{
 				{
-					Street: "street1",
-					City: "city1",
+					Street:  "street1",
+					City:    "city1",
 					ZipCode: "zip1",
 				},
 			},
 			expectedContents: []string{},
-			expectedErr: "address and lookup lengths don't match",
+			expectedErr:      "address and lookup lengths don't match",
 		},
 		{
-			desc:             "lookups only",
+			desc: "lookups only",
 			lookups: []*street.Lookup{
 				{
-					Street: "street1",
-					City: "city1",
+					Street:  "street1",
+					City:    "city1",
 					ZIPCode: "zip1",
 				},
 			},
 			expectedContents: []string{},
-			expectedErr: "address and lookup lengths don't match",
+			expectedErr:      "address and lookup lengths don't match",
 		},
 		{
-			desc:             "with invalid address and lookup",
+			desc: "with invalid address and lookup",
 			addresses: []entities.Address{
 				{
-					Street: "street1",
-					City: "city1",
+					Street:       "street1",
+					City:         "city1",
 					OriginString: "street1, city1",
-					Valid: false,
+					Valid:        false,
 				},
 			},
 			lookups: []*street.Lookup{
 				{
-					Street: "street1",
-					City: "city1",
+					Street:  "street1",
+					City:    "city1",
 					ZIPCode: "zip1",
 				},
 			},
 			expectedContents: []string{"street1, city1 -> Invalid Address"},
 		},
 		{
-			desc:             "with valid address and lookup",
+			desc: "with valid address and lookup",
 			addresses: []entities.Address{
 				{
-					Street: "street1",
-					City: "city1",
+					Street:  "street1",
+					City:    "city1",
 					ZipCode: "12345",
-					Valid: true,
+					Valid:   true,
 				},
 			},
 			lookups: []*street.Lookup{
 				{
-					Street: "street1",
-					City: "city1",
+					Street:  "street1",
+					City:    "city1",
 					ZIPCode: "zip1",
 					Results: []*street.Candidate{
 						{
 							DeliveryLine1: "street1",
-							LastLine: "city1 state1 zip1",
+							LastLine:      "city1 state1 zip1",
 						},
 					},
 				},
 			},
 			expectedContents: []string{"street1, city1, 12345 -> street1, city1, zip1"},
+		},
+		{
+			desc: "last line less than 3 len",
+			addresses: []entities.Address{
+				{
+					Street:  "street1",
+					City:    "city1",
+					ZipCode: "12345",
+					OriginString: "street1, city1, 12345",
+					Valid:   true,
+				},
+			},
+			lookups: []*street.Lookup{
+				{
+					Street:  "street1",
+					City:    "city1",
+					ZIPCode: "zip1",
+					Results: []*street.Candidate{
+						{
+							DeliveryLine1: "street1",
+							LastLine:      "city1 state1",
+						},
+					},
+				},
+			},
+			expectedContents: []string{"street1, city1, 12345 -> Invalid Address"},
 		},
 	}
 
@@ -171,11 +197,11 @@ func TestBuildRawDataFromLookups(t *testing.T) {
 		data, err := s.BuildRawDataFromLookups(test.addresses, test.lookups)
 		if err != nil {
 			if test.expectedErr == "" {
-				t.Fatalf(test.desc + ": expected no error but got one: %s", err.Error())
+				t.Fatalf(test.desc+": expected no error but got one: %s", err.Error())
 			}
 
 			if err.Error() != test.expectedErr {
-				t.Fatalf(test.desc + ": expected no error but got one: %s", err.Error())
+				t.Fatalf(test.desc+": expected no error but got one: %s", err.Error())
 			}
 
 			continue
@@ -190,7 +216,7 @@ func TestBuildRawDataFromLookups(t *testing.T) {
 func TestBuildAddressesFromRawData(t *testing.T) {
 	type test struct {
 		desc             string
-		data         [][]string
+		data             [][]string
 		expectedContents []entities.Address
 	}
 
@@ -200,7 +226,7 @@ func TestBuildAddressesFromRawData(t *testing.T) {
 			expectedContents: []entities.Address{},
 		},
 		{
-			desc:             "just headers",
+			desc: "just headers",
 			data: [][]string{
 				{
 					"Street", "City", "Zip",
@@ -209,7 +235,7 @@ func TestBuildAddressesFromRawData(t *testing.T) {
 			expectedContents: []entities.Address{},
 		},
 		{
-			desc:             "headers plus data",
+			desc: "headers plus data",
 			data: [][]string{
 				{
 					"Street", "City", "Zip",
@@ -220,16 +246,16 @@ func TestBuildAddressesFromRawData(t *testing.T) {
 			},
 			expectedContents: []entities.Address{
 				{
-					Street: "123 Main Street",
-					City: "Columbus",
-					ZipCode: "43212",
+					Street:       "123 Main Street",
+					City:         "Columbus",
+					ZipCode:      "43212",
 					OriginString: "123 Main Street, Columbus, 43212",
-					Valid: true,
+					Valid:        true,
 				},
 			},
 		},
 		{
-			desc:             "invalid row length",
+			desc: "invalid row length",
 			data: [][]string{
 				{
 					"Street", "City", "Zip",
@@ -241,7 +267,7 @@ func TestBuildAddressesFromRawData(t *testing.T) {
 			expectedContents: []entities.Address{
 				{
 					OriginString: "123 Main Street, Columbus",
-					Valid: false,
+					Valid:        false,
 				},
 			},
 		},
@@ -259,18 +285,18 @@ func TestBuildAddressesFromRawData(t *testing.T) {
 
 func TestSendLookups(t *testing.T) {
 	type test struct {
-		desc             string
-		data []*street.Lookup
-		lookupErr error
+		desc        string
+		data        []*street.Lookup
+		lookupErr   error
 		expectedErr string
 	}
 
 	tests := []test{
 		{
-			desc:             "empty data",
+			desc: "empty data",
 		},
 		{
-			desc:             "with data, no error",
+			desc: "with data, no error",
 			data: []*street.Lookup{
 				{
 					Street: "street",
@@ -278,13 +304,13 @@ func TestSendLookups(t *testing.T) {
 			},
 		},
 		{
-			desc:             "with data and error",
+			desc: "with data and error",
 			data: []*street.Lookup{
 				{
 					Street: "street",
 				},
 			},
-			lookupErr: errors.New("something went wrong"),
+			lookupErr:   errors.New("something went wrong"),
 			expectedErr: "error while sending lookups: something went wrong",
 		},
 	}
@@ -300,11 +326,11 @@ func TestSendLookups(t *testing.T) {
 		err := s.SendLookups(test.data...)
 		if err != nil {
 			if test.expectedErr == "" {
-				t.Fatalf(test.desc + ": expected no error but got one: %s", err.Error())
+				t.Fatalf(test.desc+": expected no error but got one: %s", err.Error())
 			}
 
 			if err.Error() != test.expectedErr {
-				t.Fatalf(test.desc + ": expected no error but got one: %s", err.Error())
+				t.Fatalf(test.desc+": expected no error but got one: %s", err.Error())
 			}
 
 			continue

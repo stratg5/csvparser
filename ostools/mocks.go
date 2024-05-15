@@ -5,7 +5,7 @@ import (
 )
 
 type Mock struct {
-	OpenFn func(path string) (io.Reader, func() error, error)
+	OpenFn   func(path string) (io.Reader, func() error, error)
 	CreateFn func(path string) (io.Writer, func() error, error)
 }
 

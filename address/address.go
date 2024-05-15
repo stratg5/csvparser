@@ -46,7 +46,7 @@ func (s Service) BuildAddressesFromRawData(data [][]string) []entities.Address {
 		for idx, col := range row {
 			originString += col
 
-			if idx < len(row) -1 && len(row) > 1 {
+			if idx < len(row)-1 && len(row) > 1 {
 				originString += ", "
 			}
 		}
@@ -64,11 +64,11 @@ func (s Service) BuildAddressesFromRawData(data [][]string) []entities.Address {
 
 		// trim the leading and trailing spaces from the data
 		address := entities.Address{
-			Street:  strings.TrimSpace(row[0]),
-			City:    strings.TrimSpace(row[1]),
-			ZipCode: strings.TrimSpace(row[2]),
+			Street:       strings.TrimSpace(row[0]),
+			City:         strings.TrimSpace(row[1]),
+			ZipCode:      strings.TrimSpace(row[2]),
 			OriginString: originString,
-			Valid:   true,
+			Valid:        true,
 		}
 
 		addresses = append(addresses, address)
@@ -90,7 +90,7 @@ func (s Service) BuildRawDataFromLookups(addresses []entities.Address, lookups [
 		tempAddr := addresses[idx]
 
 		if !tempAddr.Valid || len(lookup.Results) == 0 {
-			
+
 			addrLine = tempAddr.OriginString + " -> Invalid Address"
 		} else {
 			lookupAddr := lookup.Results[0]
@@ -100,7 +100,7 @@ func (s Service) BuildRawDataFromLookups(addresses []entities.Address, lookups [
 			if len(addrParts) < 3 {
 				addrLine = tempAddr.OriginString + " -> Invalid Address"
 			} else {
-				addrLine = tempAddr.Street+ ", " + tempAddr.City +", " + tempAddr.ZipCode + " -> " + lookupAddr.DeliveryLine1 + ", " + addrParts[0] + ", " + addrParts[2]
+				addrLine = tempAddr.Street + ", " + tempAddr.City + ", " + tempAddr.ZipCode + " -> " + lookupAddr.DeliveryLine1 + ", " + addrParts[0] + ", " + addrParts[2]
 			}
 		}
 
@@ -109,7 +109,6 @@ func (s Service) BuildRawDataFromLookups(addresses []entities.Address, lookups [
 
 	return output, nil
 }
-
 
 func (s Service) SendLookups(lookups ...*street.Lookup) error {
 	err := s.LookupClient.SendLookups(lookups...)

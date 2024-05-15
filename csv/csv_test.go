@@ -46,14 +46,14 @@ func TestReadCSV(t *testing.T) {
 func TestWriteCSV(t *testing.T) {
 	type test struct {
 		desc             string
-		records []string
+		records          []string
 		expectedContents string
 	}
 
 	tests := []test{
 		{
 			desc:             "should write data with a newline",
-			records:        []string{"hello"},
+			records:          []string{"hello"},
 			expectedContents: "hello\n",
 		},
 	}
@@ -82,4 +82,4 @@ func TestWriteCSV(t *testing.T) {
 			t.Fatalf(test.desc+" failed equality check", data, test.expectedContents)
 		}
 	}
-} 
+}
